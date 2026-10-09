@@ -19,13 +19,18 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Prepare web directory
+        run: |
+          mkdir -p www
+          cp index.html www/
+
       - name: Install Capacitor dependencies
         run: |
           npm init -y
           npm install @capacitor/core @capacitor/cli @capacitor/android
 
       - name: Initialize Capacitor
-        run: npx cap init "DUMA" "com.manumgames.duma" --web-dir=.
+        run: npx cap init "DUMA" "com.manumgames.duma" --web-dir=www
 
       - name: Add Android platform
         run: npx cap add android
