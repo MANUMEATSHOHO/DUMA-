@@ -44,6 +44,21 @@ jobs:
       - name: Sync web assets
         run: npx cap sync android
 
+      # --- НАЧАЛО ИСПРАВЛЕНИЯ: Исключаем конфликтующие библиотеки ---
+      - name: Patch Android build.gradle
+        run: |
+          cat << 'EOF' >> android/build.gradle
+
+          // Fix for duplicate kotlin-stdlib classes
+          subprojects {
+              configurations.all {
+                  exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
+                  exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
+              }
+          }
+          EOF
+      # --- КОНЕЦ ИСПРАВЛЕНИЯ ---
+
       - name: Build APK
         run: |
           cd android
